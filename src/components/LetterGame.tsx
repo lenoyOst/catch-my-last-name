@@ -58,6 +58,28 @@ export default function LetterGame() {
     };
   }, []);
 
+  // Arrow keys paddle
+  useEffect(() => {
+    const keys = new Set<string>();
+    const step = 18;
+    let raf: number;
+    const tick = () => {
+      if (keys.has("ArrowLeft")) {
+        paddleRef.current = Math.max(0, paddleRef.current - step);
+      }
+      if (keys.has("ArrowRight")) {
+        paddleRef.current = Math.min(window.innerWidth - paddleWidth, paddleRef.current + step);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const down = (e: KeyboardEvent) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); keys.add(e.key); } };
+    const up = (e: KeyboardEvent) => keys.delete(e.key);
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); };
+  }, []);
+
   // Spawn letters
   useEffect(() => {
     const interval = setInterval(() => {
