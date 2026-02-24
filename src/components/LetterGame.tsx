@@ -21,7 +21,7 @@ function pickLetter(): string {
   return ALL_LETTERS[Math.floor(Math.random() * ALL_LETTERS.length)];
 }
 
-export default function LetterGame() {
+export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
   const [letters, setLetters] = useState<FallingLetter[]>([]);
   const [caught, setCaught] = useState("");
   const [success, setSuccess] = useState(false);
@@ -123,7 +123,7 @@ export default function LetterGame() {
         if (caughtChars.length > 0) {
           setCaught((c) => {
             const updated = c + caughtChars.join("");
-            if (updated.toLowerCase() === TARGET) setSuccess(true);
+            if (updated.toLowerCase() === TARGET) { setSuccess(true); if (onSolve) setTimeout(onSolve, 3000); }
             return updated;
           });
         }
