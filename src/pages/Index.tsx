@@ -22,7 +22,7 @@ const Index = () => {
           ESCAPE ROOM
         </h1>
         <p className="text-muted-foreground mb-2 text-sm tracking-widest uppercase">
-          Puzzle #1 — Crack the Code
+          Puzzle #1 — Caesar Cipher
         </p>
         <p className="text-foreground/70 mb-8 text-sm leading-relaxed">
           Decode the intercepted cipher message and enter the hidden combination to proceed.
