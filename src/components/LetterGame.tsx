@@ -61,7 +61,7 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
   // Arrow keys paddle
   useEffect(() => {
     const keys = new Set<string>();
-    const step = 18;
+    const step = 24;
     let raf: number;
     const tick = () => {
       if (keys.has("ArrowLeft")) {
@@ -142,8 +142,13 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
       className="relative w-full h-screen overflow-hidden select-none"
       style={{ background: "linear-gradient(to bottom, hsl(220 20% 10%), hsl(220 20% 4%))" }}
     >
+      {/* Title */}
+      <p className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-muted-foreground text-xs tracking-widest uppercase">
+        Puzzle #2 — Write Your Last Name
+      </p>
+
       {/* Caught letters display */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-center">
+      <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10 text-center">
         {success ? (
           <div>
             <p className="text-primary text-3xl font-bold" style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-primary)" }}>
@@ -161,7 +166,7 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
       </div>
 
       {/* Controls */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10 flex gap-3">
+      <div className="absolute top-28 left-1/2 -translate-x-1/2 z-10 flex gap-3">
         <button
           onClick={() => { setCaught((c) => c.slice(0, -1)); setSuccess(false); }}
           className="px-4 py-1.5 rounded bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
@@ -206,7 +211,7 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
           width: paddleWidth,
           height: 16,
           boxShadow: "var(--glow-secondary)",
-          transition: "left 0.05s linear",
+          transition: "left 0.02s linear",
         }}
       />
     </div>

@@ -50,7 +50,7 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-lg text-center">
         <p className="text-muted-foreground text-xs tracking-widest uppercase mb-2">
-          Puzzle #2 — Cipher Decoder
+          Puzzle #1 — Cipher Decoder
         </p>
         <h2
           className="text-2xl md:text-3xl font-black text-primary mb-6 tracking-wider"
@@ -162,7 +162,7 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
               ✓ Unlocked!
             </p>
             <p className="text-secondary text-sm mt-2" style={{ textShadow: "var(--glow-secondary)" }}>
-              Proceeding to next challenge...
+              Proceeding to final challenge...
             </p>
           </div>
         )}
