@@ -8,8 +8,8 @@ type Stage = "intro" | "puzzle1" | "puzzle2" | "victory";
 const Index = () => {
   const [stage, setStage] = useState<Stage>("intro");
 
-  if (stage === "puzzle1") return <LetterGame onSolve={() => setStage("puzzle2")} />;
-  if (stage === "puzzle2") return <CipherPuzzle onSolve={() => setStage("victory")} />;
+  if (stage === "puzzle1") return <CipherPuzzle onSolve={() => setStage("puzzle2")} />;
+  if (stage === "puzzle2") return <LetterGame onSolve={() => setStage("victory")} />;
   if (stage === "victory") return <VictoryScreen />;
 
   return (
@@ -22,11 +22,10 @@ const Index = () => {
           ESCAPE ROOM
         </h1>
         <p className="text-muted-foreground mb-2 text-sm tracking-widest uppercase">
-          Puzzle #1 — Catch the Name
+          Puzzle #1 — Crack the Code
         </p>
         <p className="text-foreground/70 mb-8 text-sm leading-relaxed">
-          Letters fall from above. Move your mouse or arrow keys to catch them with the paddle.
-          Spell the correct last name to unlock the next hint.
+          Decode the intercepted cipher message and enter the hidden combination to proceed.
         </p>
         <button
           onClick={() => setStage("puzzle1")}
