@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const ENCRYPTED = "XLIWI GSQFMREXMSR MW 7 14 21";
-const SHIFT_ANSWER = 4;
-const DECODED = "THESE COMBINATION IS 7 14 21";
+const ENCRYPTED = "XA LV LPSRHUWHQW";
+const SHIFT_ANSWER = 3;
+const ANSWER = "ux is impoertent";
 
 export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
   const [shift, setShift] = useState(0);
   const [solved, setSolved] = useState(false);
-  const [inputCode, setInputCode] = useState(["", "", ""]);
-  const [codeError, setCodeError] = useState(false);
+  const [guess, setGuess] = useState("");
+  const [error, setError] = useState(false);
 
   const decrypt = (text: string, s: number) => {
     return text
@@ -27,13 +27,13 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
   const decrypted = decrypt(ENCRYPTED, shift);
   const isCorrectShift = shift === SHIFT_ANSWER;
 
-  const handleSubmitCode = () => {
-    if (inputCode[0] === "7" && inputCode[1] === "14" && inputCode[2] === "21") {
+  const handleSubmit = () => {
+    if (guess.trim().toLowerCase() === ANSWER) {
       setSolved(true);
       setTimeout(onSolve, 2000);
     } else {
-      setCodeError(true);
-      setTimeout(() => setCodeError(false), 1000);
+      setError(true);
+      setTimeout(() => setError(false), 1000);
     }
   };
 
@@ -50,7 +50,7 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-lg text-center">
         <p className="text-muted-foreground text-xs tracking-widest uppercase mb-2">
-          Puzzle #1 — Cipher Decoder
+          Puzzle #1 — Caesar Cipher
         </p>
         <h2
           className="text-2xl md:text-3xl font-black text-primary mb-6 tracking-wider"
@@ -122,36 +122,27 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
           </p>
         </div>
 
-        {/* Combination lock */}
-        {isCorrectShift && !solved && (
+        {/* Answer input */}
+        {!solved && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <p className="text-muted-foreground text-xs mb-3">Enter the combination:</p>
-            <div className="flex items-center justify-center gap-2 mb-4">
-              {inputCode.map((val, i) => (
-                <input
-                  key={i}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={2}
-                  value={val}
-                  onChange={(e) => {
-                    const next = [...inputCode];
-                    next[i] = e.target.value.replace(/\D/g, "");
-                    setInputCode(next);
-                  }}
-                  className={`w-14 h-14 text-center text-2xl font-bold rounded-lg bg-card border-2 text-foreground outline-none transition-colors ${
-                    codeError ? "border-accent" : "border-border focus:border-primary"
-                  }`}
-                  style={{ fontFamily: "var(--font-display)" }}
-                />
-              ))}
-            </div>
+            <p className="text-muted-foreground text-xs mb-3">Type the decoded message to proceed:</p>
+            <input
+              type="text"
+              value={guess}
+              onChange={(e) => setGuess(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              placeholder="Enter decoded message..."
+              className={`w-full px-4 py-3 text-center text-lg rounded-lg bg-card border-2 text-foreground outline-none transition-colors mb-4 ${
+                error ? "border-accent" : "border-border focus:border-primary"
+              }`}
+              style={{ fontFamily: "var(--font-mono)" }}
+            />
             <button
-              onClick={handleSubmitCode}
+              onClick={handleSubmit}
               className="px-8 py-2.5 rounded-lg bg-primary text-primary-foreground font-bold tracking-wider hover:opacity-90 transition-opacity"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              UNLOCK
+              SUBMIT
             </button>
           </div>
         )}
@@ -159,18 +150,13 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
         {solved && (
           <div className="animate-in fade-in duration-700">
             <p className="text-primary text-2xl font-bold" style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-primary)" }}>
-              ✓ Unlocked!
+              ✓ Correct!
             </p>
             <p className="text-secondary text-sm mt-2" style={{ textShadow: "var(--glow-secondary)" }}>
               Proceeding to final challenge...
             </p>
           </div>
         )}
-
-        {/* Hint */}
-        <p className="text-muted-foreground/50 text-[10px] mt-8">
-          Remember the hint: MADUR PITUACH 1
-        </p>
       </div>
     </div>
   );
