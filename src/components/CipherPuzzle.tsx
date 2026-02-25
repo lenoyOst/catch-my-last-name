@@ -1,31 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import caesarImage from "@/assets/caesar-cipher-shift4.png";
 
-const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-const ENCRYPTED = "XA LV LPSRHUWHQW";
-const SHIFT_ANSWER = 3;
-const ANSWER = "ux is impoertent";
+const ENCRYPTED = "YB MW MQTSVXERX";
+const ANSWER = "ux is important";
 
 export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
-  const [shift, setShift] = useState(0);
   const [solved, setSolved] = useState(false);
   const [guess, setGuess] = useState("");
   const [error, setError] = useState(false);
-
-  const decrypt = (text: string, s: number) => {
-    return text
-      .split("")
-      .map((c) => {
-        if (c >= "A" && c <= "Z") {
-          const i = (c.charCodeAt(0) - 65 - s + 26) % 26;
-          return String.fromCharCode(i + 65);
-        }
-        return c;
-      })
-      .join("");
-  };
-
-  const decrypted = decrypt(ENCRYPTED, shift);
-  const isCorrectShift = shift === SHIFT_ANSWER;
 
   const handleSubmit = () => {
     if (guess.trim().toLowerCase() === ANSWER) {
@@ -36,15 +18,6 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
       setTimeout(() => setError(false), 1000);
     }
   };
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp") setShift((s) => (s + 1) % 26);
-      if (e.key === "ArrowDown") setShift((s) => (s - 1 + 26) % 26);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, []);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -67,59 +40,14 @@ export default function CipherPuzzle({ onSolve }: { onSolve: () => void }) {
           </p>
         </div>
 
-        {/* Cipher wheel */}
+        {/* Caesar cipher reference image */}
         <div className="mb-6">
-          <p className="text-muted-foreground text-xs mb-3">
-            Rotate the cipher wheel (↑↓ keys or buttons) — Shift: {shift}
-          </p>
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <button
-              onClick={() => setShift((s) => (s - 1 + 26) % 26)}
-              className="w-10 h-10 rounded bg-muted text-foreground text-xl hover:bg-muted/80 transition-colors"
-            >
-              −
-            </button>
-            <div
-              className="bg-card border border-border rounded-lg px-6 py-3 min-w-[80px]"
-              style={{ boxShadow: isCorrectShift ? "var(--glow-primary)" : "none" }}
-            >
-              <span className="text-3xl font-black text-primary" style={{ fontFamily: "var(--font-display)" }}>
-                {shift}
-              </span>
-            </div>
-            <button
-              onClick={() => setShift((s) => (s + 1) % 26)}
-              className="w-10 h-10 rounded bg-muted text-foreground text-xl hover:bg-muted/80 transition-colors"
-            >
-              +
-            </button>
-          </div>
-
-          {/* Letter mapping preview */}
-          <div className="overflow-x-auto pb-2">
-            <div className="inline-flex gap-0.5 text-[10px] tracking-tight">
-              {ALPHABET.slice(0, 13).map((l, i) => (
-                <div key={i} className="flex flex-col items-center w-5">
-                  <span className="text-muted-foreground">{l}</span>
-                  <span className="text-primary">↓</span>
-                  <span className="text-foreground font-bold">{ALPHABET[(i - shift + 26) % 26]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Decrypted result */}
-        <div
-          className={`rounded-lg p-4 mb-6 transition-all ${isCorrectShift ? "bg-primary/10 border border-primary/30" : "bg-muted"}`}
-        >
-          <p className="text-muted-foreground text-xs mb-1">Decoded output:</p>
-          <p
-            className={`text-lg tracking-[0.2em] font-bold ${isCorrectShift ? "text-primary" : "text-foreground/60"}`}
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            {decrypted}
-          </p>
+          <img
+            src={caesarImage}
+            alt="Caesar cipher wheel with shift of 4"
+            className="mx-auto rounded-lg border border-border max-w-[280px] w-full"
+          />
+          <p className="text-muted-foreground text-xs mt-2">Hint: Shift = 4</p>
         </div>
 
         {/* Answer input */}
