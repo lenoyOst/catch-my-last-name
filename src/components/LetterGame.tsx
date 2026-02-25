@@ -21,7 +21,7 @@ function pickLetter(): string {
   return ALL_LETTERS[Math.floor(Math.random() * ALL_LETTERS.length)];
 }
 
-export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
+export default function LetterGame({ onSolve }: {onSolve?: () => void;}) {
   const [letters, setLetters] = useState<FallingLetter[]>([]);
   const [caught, setCaught] = useState("");
   const [success, setSuccess] = useState(false);
@@ -86,11 +86,11 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    const down = (e: KeyboardEvent) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); keys.add(e.key); } };
+    const down = (e: KeyboardEvent) => {if (e.key === "ArrowLeft" || e.key === "ArrowRight") {e.preventDefault();keys.add(e.key);}};
     const up = (e: KeyboardEvent) => keys.delete(e.key);
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); };
+    return () => {cancelAnimationFrame(raf);window.removeEventListener("keydown", down);window.removeEventListener("keyup", up);};
   }, []);
 
   // Spawn letters
@@ -98,15 +98,15 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
     const interval = setInterval(() => {
       const id = nextId.current++;
       setLetters((prev) => [
-        ...prev,
-        {
-          id,
-          char: pickLetter(),
-          x: Math.random() * (window.innerWidth - 30),
-          y: -30,
-          speed: 2 + Math.random() * 3,
-        },
-      ]);
+      ...prev,
+      {
+        id,
+        char: pickLetter(),
+        x: Math.random() * (window.innerWidth - 30),
+        y: -30,
+        speed: 2 + Math.random() * 3
+      }]
+      );
     }, 550);
     return () => clearInterval(interval);
   }, []);
@@ -128,15 +128,15 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
           if (ny >= paddleTop && ny <= paddleTop + 25 && l.x + 20 >= pLeft && l.x <= pRight) {
             caughtChars.push(l.char);
           } else if (ny > h) {
+
+
+
+
             // off screen
-          } else {
-            next.push({ ...l, y: ny });
-          }
-        }
-        if (caughtChars.length > 0) {
+          } else {next.push({ ...l, y: ny });}}if (caughtChars.length > 0) {
           setCaught((c) => {
             const updated = c + caughtChars.join("");
-            if (updated.toLowerCase() === TARGET) { setSuccess(true); if (onSolve) setTimeout(onSolve, 3000); }
+            if (updated.toLowerCase() === TARGET) {setSuccess(true);if (onSolve) setTimeout(onSolve, 3000);}
             return updated;
           });
         }
@@ -153,43 +153,43 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
     <div
       ref={containerRef}
       className="relative w-full h-screen overflow-hidden select-none"
-      style={{ background: "linear-gradient(to bottom, hsl(220 20% 10%), hsl(220 20% 4%))" }}
-    >
+      style={{ background: "linear-gradient(to bottom, hsl(220 20% 10%), hsl(220 20% 4%))" }}>
+
       {/* Title */}
-      <p className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-muted-foreground text-xs tracking-widest uppercase">
+      <p className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-xs tracking-widest uppercase text-primary">
         Puzzle #2 — Write Your Last Name
       </p>
 
       {/* Caught letters display */}
       <div className="absolute top-14 left-1/2 -translate-x-1/2 z-10 text-center">
-        {success ? (
-          <div>
+        {success ?
+        <div>
             <p className="text-primary text-3xl font-bold" style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-primary)" }}>
               ✓ Succeed!
             </p>
             <p className="text-secondary text-lg mt-2" style={{ textShadow: "var(--glow-secondary)" }}>
               Hint: MADUR PITUACH 1
             </p>
-          </div>
-        ) : (
-          <p className="text-primary text-3xl tracking-[0.3em]" style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-primary)" }}>
+          </div> :
+
+        <p className="text-primary text-3xl tracking-[0.3em]" style={{ fontFamily: "var(--font-display)", textShadow: "var(--glow-primary)" }}>
             {caught || "___"}
           </p>
-        )}
+        }
       </div>
 
       {/* Controls */}
       <div className="absolute top-28 left-1/2 -translate-x-1/2 z-10 flex gap-3">
         <button
-          onClick={() => { setCaught((c) => c.slice(0, -1)); setSuccess(false); }}
-          className="px-4 py-1.5 rounded bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
-        >
+          onClick={() => {setCaught((c) => c.slice(0, -1));setSuccess(false);}}
+          className="px-4 py-1.5 rounded bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors">
+
           ⌫ Delete
         </button>
         <button
-          onClick={() => { setCaught(""); setSuccess(false); }}
-          className="px-4 py-1.5 rounded bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors"
-        >
+          onClick={() => {setCaught("");setSuccess(false);}}
+          className="px-4 py-1.5 rounded bg-muted text-foreground text-sm hover:bg-muted/80 transition-colors">
+
           Clear
         </button>
       </div>
@@ -200,25 +200,25 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
       </div>
 
       {/* Falling letters */}
-      {letters.map((l) => (
-        <div
-          key={l.id}
-          className="absolute text-2xl font-bold"
-          style={{
-            left: l.x,
-            top: l.y,
-            color: RELEVANT.has(l.char) ? "hsl(45 100% 50%)" : "hsl(220 10% 45%)",
-            textShadow: RELEVANT.has(l.char) ? "var(--glow-primary)" : "none",
-          }}
-        >
+      {letters.map((l) =>
+      <div
+        key={l.id}
+        className="absolute text-2xl font-bold"
+        style={{
+          left: l.x,
+          top: l.y,
+          color: RELEVANT.has(l.char) ? "hsl(45 100% 50%)" : "hsl(220 10% 45%)",
+          textShadow: RELEVANT.has(l.char) ? "var(--glow-primary)" : "none"
+        }}>
+
           {l.char}
         </div>
-      ))}
+      )}
 
       {/* Paddle */}
       <div
         ref={paddleElRef}
-        className="absolute rounded-full bg-secondary"
+        className="absolute rounded-full bg-primary"
         style={{
           bottom: 20,
           left: 0,
@@ -226,9 +226,9 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
           height: 16,
           boxShadow: "var(--glow-secondary)",
           transform: `translateX(${paddleRef.current}px)`,
-          willChange: "transform",
-        }}
-      />
-    </div>
-  );
+          willChange: "transform"
+        }} />
+
+    </div>);
+
 }
