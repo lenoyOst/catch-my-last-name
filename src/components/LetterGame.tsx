@@ -26,7 +26,8 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
   const [caught, setCaught] = useState("");
   const [success, setSuccess] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const paddleRef = useRef<number>(0);
+  const paddleElRef = useRef<HTMLDivElement>(null);
+  const paddleRef = useRef<number>(window.innerWidth / 2 - 70);
   const nextId = useRef(0);
   const paddleWidth = 140;
 
@@ -42,11 +43,17 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // Mouse/touch paddle
+  // Mouse/touch paddle — directly update DOM
   useEffect(() => {
+    const syncPaddle = () => {
+      if (paddleElRef.current) {
+        paddleElRef.current.style.transform = `translateX(${paddleRef.current}px)`;
+      }
+    };
     const move = (x: number) => {
       const w = window.innerWidth;
       paddleRef.current = Math.max(0, Math.min(x - paddleWidth / 2, w - paddleWidth));
+      syncPaddle();
     };
     const onMouse = (e: MouseEvent) => move(e.clientX);
     const onTouch = (e: TouchEvent) => move(e.touches[0].clientX);
@@ -58,17 +65,23 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
     };
   }, []);
 
-  // Arrow keys paddle
+  // Arrow keys paddle — directly update DOM
   useEffect(() => {
     const keys = new Set<string>();
     const step = 24;
     let raf: number;
     const tick = () => {
+      let moved = false;
       if (keys.has("ArrowLeft")) {
         paddleRef.current = Math.max(0, paddleRef.current - step);
+        moved = true;
       }
       if (keys.has("ArrowRight")) {
         paddleRef.current = Math.min(window.innerWidth - paddleWidth, paddleRef.current + step);
+        moved = true;
+      }
+      if (moved && paddleElRef.current) {
+        paddleElRef.current.style.transform = `translateX(${paddleRef.current}px)`;
       }
       raf = requestAnimationFrame(tick);
     };
@@ -204,14 +217,16 @@ export default function LetterGame({ onSolve }: { onSolve?: () => void }) {
 
       {/* Paddle */}
       <div
+        ref={paddleElRef}
         className="absolute rounded-full bg-secondary"
         style={{
           bottom: 20,
-          left: paddleRef.current,
+          left: 0,
           width: paddleWidth,
           height: 16,
           boxShadow: "var(--glow-secondary)",
-          transition: "left 0.02s linear",
+          transform: `translateX(${paddleRef.current}px)`,
+          willChange: "transform",
         }}
       />
     </div>
